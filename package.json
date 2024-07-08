@@ -1,0 +1,24 @@
+{
+  "name": "base-express-with-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -r \"pnpm build --watch\" \"pnpm serve\"",
+    "serve": "node --env-file=.env --watch dist",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.14.10",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "lodash-es": "^4.17.21"
+  }
+}
