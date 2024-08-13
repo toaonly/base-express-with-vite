@@ -12,7 +12,7 @@ export interface IRouter<
   defaultQuery?: Q
   method?: M
   middlewares?: NextFunction[]
-  url: string
+  path: string
   handler<T, B, P, Q>(
     req: Request<P, T, B, Q>
   ): PromiseLike<{
@@ -23,7 +23,7 @@ export interface IRouter<
   }>
 }
 
-export default abstract class Router<
+export abstract class Router<
   M extends RouterMethods,
   P extends Dictionary,
   Q extends Dictionary,
@@ -32,18 +32,18 @@ export default abstract class Router<
 {
   method: M
   middlewares
-  url
+  path
   handler
 
-  constructor({ method, middlewares, url, handler }: IRouter<M, P, Q, B>) {
+  constructor({ method, middlewares, path, handler }: IRouter<M, P, Q, B>) {
     this.method = method ?? (ROUTER_METHOD.GET as any)
     this.middlewares = (middlewares ?? []) as NextFunction[]
-    this.url = url
+    this.path = path
     this.handler = handler
   }
 }
 
-export class RouterGetRequest<
+export class GetRouter<
   P extends Dictionary,
   Q extends Dictionary
 > extends Router<ROUTER_METHOD.GET, P, Q> {
@@ -52,7 +52,7 @@ export class RouterGetRequest<
   }
 }
 
-export class RouterPostRequest<
+export class PostRouter<
   P extends Dictionary,
   Q extends Dictionary,
   B
@@ -62,7 +62,7 @@ export class RouterPostRequest<
   }
 }
 
-export class RouterPutRequest<
+export class PutRouter<
   P extends Dictionary,
   Q extends Dictionary
 > extends Router<ROUTER_METHOD.PUT, P, Q> {
@@ -71,7 +71,7 @@ export class RouterPutRequest<
   }
 }
 
-export class RouterPatchRequest<
+export class PatchRouter<
   P extends Dictionary,
   Q extends Dictionary
 > extends Router<ROUTER_METHOD.PATCH, P, Q> {
@@ -80,7 +80,7 @@ export class RouterPatchRequest<
   }
 }
 
-export class RouterDeleteRequest<
+export class DeleteRouter<
   P extends Dictionary,
   Q extends Dictionary
 > extends Router<ROUTER_METHOD.DELETE, P, Q> {

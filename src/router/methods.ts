@@ -6,7 +6,4 @@ export enum ROUTER_METHOD {
   PATCH = 'PATCH',
 }
 
-export type RouterMethods =
-  | Uppercase<EnumValues<typeof ROUTER_METHOD>>
-  | Lowercase<EnumValues<typeof ROUTER_METHOD>>
-  | ROUTER_METHOD
+export type RouterMethods = Uppercase<ROUTER_METHOD> | Lowercase<ROUTER_METHOD>

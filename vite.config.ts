@@ -39,7 +39,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         fileName: (_, entryName) => `${entryName}.js`,
       },
       rollupOptions: {
-        external: [/node_modules/],
+        external: [/node_modules/, 'fs'],
       },
     },
   }

@@ -1,12 +1,15 @@
+import bodyParser from 'body-parser'
 import express from 'express'
 import api from './api'
-import { cors } from './configs'
+import { cors, multipart } from './middlewares'
 
 const app = express()
 
 app.disable('x-powered-by')
 app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors)
+app.use(multipart)
 
 app.use('/api', api)
 

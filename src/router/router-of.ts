@@ -1,9 +1,9 @@
 import {
-  RouterDeleteRequest,
-  RouterGetRequest,
-  RouterPatchRequest,
-  RouterPostRequest,
-  RouterPutRequest,
+  DeleteRouter,
+  GetRouter,
+  PatchRouter,
+  PostRouter,
+  PutRouter,
 } from './router'
 import { ROUTER_METHOD } from './methods'
 
@@ -13,35 +13,26 @@ type RouterByMethod<
   Q extends Dictionary,
   B
 > = M extends ROUTER_METHOD.GET
-  ? RouterGetRequest<P, Q>
+  ? GetRouter<P, Q>
   : M extends ROUTER_METHOD.POST
-  ? RouterPostRequest<P, Q, B>
+  ? PostRouter<P, Q, B>
   : M extends ROUTER_METHOD.PATCH
-  ? RouterPatchRequest<P, Q>
+  ? PatchRouter<P, Q>
   : M extends ROUTER_METHOD.PUT
-  ? RouterPutRequest<P, Q>
+  ? PutRouter<P, Q>
   : M extends ROUTER_METHOD.DELETE
-  ? RouterDeleteRequest<P, Q>
+  ? DeleteRouter<P, Q>
   : never
 
-const API_REQUEST = {
-  [ROUTER_METHOD.GET]: RouterGetRequest,
-  [ROUTER_METHOD.POST]: RouterPostRequest,
-  [ROUTER_METHOD.DELETE]: RouterDeleteRequest,
-  [ROUTER_METHOD.PATCH]: RouterPatchRequest,
-  [ROUTER_METHOD.PUT]: RouterPutRequest,
+const ROUTER_BY_METHOD = {
+  [ROUTER_METHOD.GET]: GetRouter,
+  [ROUTER_METHOD.POST]: PostRouter,
+  [ROUTER_METHOD.DELETE]: DeleteRouter,
+  [ROUTER_METHOD.PATCH]: PatchRouter,
+  [ROUTER_METHOD.PUT]: PutRouter,
 }
 
-const routerOf = <P extends Dictionary, Q extends Dictionary, B>(
-  t:
-    | RouterGetRequest<P, Q>
-    | RouterPatchRequest<P, Q>
-    | RouterPostRequest<P, Q, B>
-    | RouterDeleteRequest<P, Q>
-    | RouterPutRequest<P, Q>
-) => t
-
-const createRouterOfByMethod =
+const generateRouterOfByMethod =
   <
     M extends ROUTER_METHOD,
     P extends Dictionary,
@@ -51,5 +42,14 @@ const createRouterOfByMethod =
   >(
     method: M
   ) =>
-  <P extends Dictionary, Q extends Dictionary, B>(t: Omit<A, 'method'>) =>
-    routerOf<P, Q, B>(new API_REQUEST[method](t as any))
+  (t: Omit<A, 'method'>) => {
+    const Router = ROUTER_BY_METHOD[method] as any
+
+    return new Router(t) as A
+  }
+
+export const getOf = generateRouterOfByMethod(ROUTER_METHOD.GET)
+export const postOf = generateRouterOfByMethod(ROUTER_METHOD.POST)
+export const putOf = generateRouterOfByMethod(ROUTER_METHOD.PUT)
+export const patchOf = generateRouterOfByMethod(ROUTER_METHOD.PATCH)
+export const deleteOf = generateRouterOfByMethod(ROUTER_METHOD.DELETE)
