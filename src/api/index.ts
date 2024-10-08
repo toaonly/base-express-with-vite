@@ -5,7 +5,9 @@ import { Router } from 'express'
 
 const router = Router()
 
-// router.use('/auth', auth)
+router.get('/', (_, res) => {
+  res.json({ result: true })
+})
 // router.use('/data', data)
 // router.use('/pipelines', pipelines)
 

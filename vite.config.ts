@@ -4,23 +4,21 @@ import {
   defineConfig,
   PluginOption,
   loadEnv,
-  createViteRuntime,
 } from 'vite'
 import { configDefaults } from './vite/config'
 import { resolve } from './vite/utils'
+import packageJson from './package.json'
 
 export default defineConfig(({ mode }: ConfigEnv) => {
-  const env = Object.assign(process.env, loadEnv(mode, process.cwd(), ''))
+  const appEnv = loadEnv(mode, process.cwd(), '')
+  
+  Object.assign(process.env, appEnv)
 
   const config: UserConfig = {
     appType: 'custom',
 
     esbuild: {
-      target: ['node20', 'esnext'],
-    },
-
-    optimizeDeps: {
-      entries: [resolve('src/index.ts')],
+      target: ['esnext'],
     },
 
     resolve: {
@@ -39,7 +37,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         fileName: (_, entryName) => `${entryName}.js`,
       },
       rollupOptions: {
-        external: [/node_modules/],
+        external: [/node_modules|http/, ...Object.keys(packageJson.dependencies)]
       },
     },
   }

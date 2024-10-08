@@ -41,6 +41,7 @@ const routerOf = <P extends Dictionary, Q extends Dictionary, B>(
     | RouterPutRequest<P, Q>
 ) => t
 
+// @ts-ignore
 const createRouterOfByMethod =
   <
     M extends ROUTER_METHOD,
@@ -52,4 +53,5 @@ const createRouterOfByMethod =
     method: M
   ) =>
   <P extends Dictionary, Q extends Dictionary, B>(t: Omit<A, 'method'>) =>
+    // @ts-ignore
     routerOf<P, Q, B>(new API_REQUEST[method](t as any))
